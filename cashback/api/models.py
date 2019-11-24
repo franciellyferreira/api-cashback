@@ -16,16 +16,16 @@ class Compra(models.Model):
     valor = models.DecimalField('Valor', max_digits=8, decimal_places=2)
     data = models.DateField('Data')
     cpf = models.CharField('CPF', max_length=11)
-    status = models.CharField('Status', max_length=20)
-    cashback_porcentagem = models.DecimalField(
+    status = models.CharField('Status', max_length=20, default="Em validação")
+    cashback_porcentagem = models.IntegerField(
         'Porcentagem de Cashback',
-        max_digits=2,
-        decimal_places=2
+        null=True
     )
     cashback_valor = models.DecimalField(
         'Valor do Cashback',
         max_digits=8,
-        decimal_places=2
+        decimal_places=2,
+        null=True
     )
 
     def __str__(self):

@@ -20,4 +20,5 @@ urlpatterns = [
     # endpoints do Revendedor
     url(r'^revendedores/$', views.RevendedorCreate.as_view(), name='revendedor-create'),
     url(r'^revendedores/login/$', views.revendedor_login, name='revendedor-login'),
+    url(r'^compras/$', views.CompraCreate.as_view(), name='compra-create'),
 ]

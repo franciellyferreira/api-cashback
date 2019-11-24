@@ -12,5 +12,4 @@ class RevendedorSerializer(serializers.ModelSerializer):
 class CompraSerializer(serializers.ModelSerializer):
     class Meta:
         model = Compra
-        fields = ('valor', 'data', 'cpf', 'status',
-                  'cashback_porcentagem', 'cashback_valor')
+        fields = ('valor', 'data', 'cpf', 'status', 'cashback_porcentagem', 'cashback_valor')
