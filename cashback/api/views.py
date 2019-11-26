@@ -11,16 +11,18 @@ from django.contrib.auth.hashers import (
     check_password
 )
 from rest_framework.views import APIView
+from django.http import Http404
 
 from api.models import Revendedor, Compra
 from api.serializers import (
     RevendedorSerializer, 
-    CompraSerializer
+    CompraSerializerInput,
+    CompraSerializerOutput,
 )
 
 
 @api_view(['POST'])
-@permission_classes([IsAuthenticated])
+# @permission_classes([IsAuthenticated])
 def revendedor_login(request):
     """
         Valida o login do Revendedor.
@@ -42,14 +44,13 @@ def revendedor_login(request):
     )
 
 
-class RevendedorCreate(generics.CreateAPIView):
+class RevendedorCreate(APIView):
     """
         Cria um novo cadastro do Revendedor.
     """
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
 
-    def post(self, request):
-        self.serializer_class = RevendedorSerializer
+    def post(self, request, format=None):
         senha = request.data['senha']
         request.data['senha'] = make_password(senha)
         serializer = RevendedorSerializer(data=request.data)
@@ -59,43 +60,62 @@ class RevendedorCreate(generics.CreateAPIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class CompraCreate(APIView):
+class CompraListCreate(APIView):
     """
-        Cria um novo cadastro de Compra.
+        Lista todas as compras cadastradas
+        e cadastra uma nova compra.
     """
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
 
-    def calc_porcentagem_cashback(self, valor):
-        """
-            Calcula o valor da porcentagem de Cashback.
-        """
-        if valor <= 1000:
-            return 10
-        elif valor > 1000 and valor <= 1500:
-            return 15
-        elif valor > 1500:
-            return 20
-
-    def calc_valor_cashback(self, valor, porcentagem):
-        """
-            Calcula o valor do Cashback.
-        """
-        valor_cashback = (porcentagem * valor) / 100
-        return valor_cashback
+    def get(self, request, format=None):
+        compras = Compra.objects.all()
+        serializer = CompraSerializerOutput(compras, many=True)
+        return Response(serializer.data)
 
     def post(self, request):
-        porcentagem_cashback = self.calc_porcentagem_cashback(request.data['valor'])
-        request.data['cashback_porcentagem'] = porcentagem_cashback
-
-        valor_cashback = self.calc_valor_cashback(request.data['valor'], porcentagem_cashback)
-        request.data['cashback_valor'] = valor_cashback
-
         if request.data['cpf'] == "15350946056":
             request.data['status'] = "Aprovado"
-
-        self.serializer_class = CompraSerializer
-        serializer = CompraSerializer(data=request.data)
+        serializer = CompraSerializerInput(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class CompraUpdateDelete(APIView):
+    """
+        Atualiza o cadastro de uma compra.
+    """
+    # permission_classes = [IsAuthenticated]
+
+    def get_object(self, pk):
+        try:
+            return Compra.objects.get(pk=pk)
+        except Compra.DoesNotExist:
+            raise Http404
+
+    def put(self, request, pk, format=None):
+        compra = self.get_object(pk)
+        if compra.status == "Em validação":
+            self.serializer_class = CompraSerializerInput
+            serializer = CompraSerializerInput(compra, data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response(
+                {'status': 'Esta compra não pode ser editada.'},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+    def delete(self, request, pk, format=None):
+        compra = self.get_object(pk)
+        if compra.status == "Em validação":
+            compra.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        else:
+            return Response(
+                {'status': 'Esta compra não pode ser deletada.'},
+                status=status.HTTP_404_NOT_FOUND
+            )

@@ -9,7 +9,7 @@ from rest_framework_simplejwt.views import (
 from . import views
 
 
-urlpatterns = [    
+urlpatterns = [
     # gera token para autenticacao jwt
     path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     # verifica se o token é válido
@@ -20,5 +20,7 @@ urlpatterns = [
     # endpoints do Revendedor
     url(r'^revendedores/$', views.RevendedorCreate.as_view(), name='revendedor-create'),
     url(r'^revendedores/login/$', views.revendedor_login, name='revendedor-login'),
-    url(r'^compras/$', views.CompraCreate.as_view(), name='compra-create'),
+    # endpoints da Compra
+    url(r'^compras/$', views.CompraListCreate.as_view(), name='compra-list-create'),
+    url(r'^compras/(?P<pk>[0-9]+)/$', views.CompraUpdateDelete.as_view(), name='compra-update-delete'),
 ]

@@ -17,16 +17,19 @@ class Compra(models.Model):
     data = models.DateField('Data')
     cpf = models.CharField('CPF', max_length=11)
     status = models.CharField('Status', max_length=20, default="Em validação")
-    cashback_porcentagem = models.IntegerField(
-        'Porcentagem de Cashback',
-        null=True
-    )
-    cashback_valor = models.DecimalField(
-        'Valor do Cashback',
-        max_digits=8,
-        decimal_places=2,
-        null=True
-    )
+
+    @property
+    def cashback_porcentagem(self):
+        if self.valor <= 1000:
+            return 10
+        elif self.valor > 1000 and self.valor <= 1500:
+            return 15
+        elif self.valor > 1500:
+            return 20
+
+    @property
+    def cashback_valor(self):
+        return round((self.cashback_porcentagem * self.valor) / 100, 2)
 
     def __str__(self):
         return f'{self.cpf} - {self.cashback_valor}'
