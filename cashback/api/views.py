@@ -13,6 +13,10 @@ from django.contrib.auth.hashers import (
 from rest_framework.views import APIView
 from django.http import Http404
 
+import copy
+import requests
+import json
+
 from api.models import Revendedor, Compra
 from api.serializers import (
     RevendedorSerializer, 
@@ -21,8 +25,11 @@ from api.serializers import (
 )
 
 
+URL_API_GB='https://mdaqk8ek5j.execute-api.us-east-1.amazonaws.com/v1/cashback?cpf='
+
+
 @api_view(['POST'])
-# @permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 def revendedor_login(request):
     """
         Valida o login do Revendedor.
@@ -48,11 +55,9 @@ class RevendedorCreate(APIView):
     """
         Cria um novo cadastro do Revendedor.
     """
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
     def post(self, request, format=None):
-        senha = request.data['senha']
-        request.data['senha'] = make_password(senha)
         serializer = RevendedorSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -65,7 +70,7 @@ class CompraListCreate(APIView):
         Lista todas as compras cadastradas
         e cadastra uma nova compra.
     """
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
     def get(self, request, format=None):
         compras = Compra.objects.all()
@@ -73,9 +78,10 @@ class CompraListCreate(APIView):
         return Response(serializer.data)
 
     def post(self, request):
-        if request.data['cpf'] == "15350946056":
-            request.data['status'] = "Aprovado"
-        serializer = CompraSerializerInput(data=request.data)
+        compra = copy.deepcopy(request.data)
+        if compra['cpf'] == "15350946056":
+            compra['status'] = "Aprovado"
+        serializer = CompraSerializerInput(data=compra)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -86,7 +92,7 @@ class CompraUpdateDelete(APIView):
     """
         Atualiza o cadastro de uma compra.
     """
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
     def get_object(self, pk):
         try:
@@ -119,3 +125,23 @@ class CompraUpdateDelete(APIView):
                 {'status': 'Esta compra não pode ser deletada.'},
                 status=status.HTTP_404_NOT_FOUND
             )
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def cashback_list(request):
+    """
+        Lista o calculo total de cashback.
+    """
+    compras_list = Compra.objects.distinct().values("cpf")
+    if compras_list:
+        cashback = []
+        for item in compras_list:
+            response = requests.get(URL_API_GB + item['cpf'])
+            data = response.json()
+            if data['statusCode'] == 200:
+                cashback.append({"cpf": item['cpf'], "credito": data['body']['credit']})
+            
+        return Response(cashback, status=status.HTTP_200_OK)
+    else:
+        return Response({}, status=status.HTTP_404_NOT_FOUND)

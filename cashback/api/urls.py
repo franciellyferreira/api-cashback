@@ -23,4 +23,5 @@ urlpatterns = [
     # endpoints da Compra
     url(r'^compras/$', views.CompraListCreate.as_view(), name='compra-list-create'),
     url(r'^compras/(?P<pk>[0-9]+)/$', views.CompraUpdateDelete.as_view(), name='compra-update-delete'),
+    url(r'^compras/cashback/$', views.cashback_list, name='list-cashback'),
 ]
