@@ -25,18 +25,21 @@ Crie um arquivo para armazenar as variáveis de ambiente sensíveis
 $ cd cashback
 $ touch .env
 ```
-<p>
+
 Adicionar no arquivo .env:
-<br>SECRET_KEY="Adicionar Secret Key do Projeto Django"
-<br>DEBUG="True ou False"
-<br><br>DATABASE_NAME="Nome do Banco de Dados"
-<br>DATABASE_USER="Usuário do Banco de Dados"
-<br>DATABASE_PASSWORD="Senha do Banco de Dados"
-<br>DATABASE_HOST="Host do Banco de Dados"
-<br>DATABASE_PORT="Porta do Banco de Dados"
-<br><br>LANGUAGE_CODE=pt-BR
-<br>TIME_ZONE=America/Sao_Paulo
-</p>
+```
+SECRET_KEY="Adicionar Secret Key do Projeto Django"
+DEBUG="True ou False"
+
+DATABASE_NAME="Nome do Banco de Dados"
+DATABASE_USER="Usuário do Banco de Dados"
+DATABASE_PASSWORD="Senha do Banco de Dados"
+DATABASE_HOST="Host do Banco de Dados"
+DATABASE_PORT="Porta do Banco de Dados"
+
+LANGUAGE_CODE=pt-BR
+TIME_ZONE=America/Sao_Paulo
+```
 
 
 ### Virtualenv
