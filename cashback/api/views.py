@@ -126,7 +126,7 @@ class CompraUpdateDelete(APIView):
 
 
 @api_view(['GET'])
-# @permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 def cashback_list(request):
     """
         Lista o calculo total de cashback.
