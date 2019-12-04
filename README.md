@@ -41,7 +41,6 @@ LANGUAGE_CODE=pt-BR
 TIME_ZONE=America/Sao_Paulo
 ```
 
-
 ### Virtualenv
 
 Se você não tiver instalado, faça a instalação do Virtualenv:
@@ -67,6 +66,11 @@ Instalar as dependências:
 $ pip3 install -r requirements.txt
 ```
 
+*Caso você tenha algum problema para instalar a dependência **mysqlclient** que consta no arquivo requirements.txt, tente instalar as seguintes bibliotecas:*
+```bash
+$ sudo apt-get install libssl-dev libffi-dev
+```
+
 ### Migrations
 
 Criar as migrations
@@ -80,12 +84,6 @@ Criar super usuário para usar na Autenticação JWT
 ```bash
 $ python3 manage.py createsuperuser
 ```
-
-!!! Caso você tenha algum problema para instalar a dependência *mysqlclient* que consta no arquivo requirements.txt, tente instalar as seguintes bibliotecas:
-```bash
-$ sudo apt-get install libssl-dev libffi-dev
-```
-
 
 ### Executar Testes
 
