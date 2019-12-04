@@ -27,13 +27,13 @@ $ touch .env
 ```
 <p>
 Adicionar no arquivo .env:
-<br>SECRET_KEY=<SECRET_KEY_DJANGO_PROJECT>
-<br>DEBUG=<True>
-<br><br>DATABASE_NAME=<NOME_BANCO>
-<br>DATABASE_USER=<USUARIO_BANCO>
-<br>DATABASE_PASSWORD=<SENHA_BANCO>
-<br>DATABASE_HOST=<HOST_BANCO>
-<br>DATABASE_PORT=<PORTA_BANCO>
+<br>SECRET_KEY="Adicionar Secret Key do Projeto Django"
+<br>DEBUG="True ou False"
+<br><br>DATABASE_NAME="Nome do Banco de Dados"
+<br>DATABASE_USER="Usuário do Banco de Dados"
+<br>DATABASE_PASSWORD="Senha do Banco de Dados"
+<br>DATABASE_HOST="Host do Banco de Dados"
+<br>DATABASE_PORT="Porta do Banco de Dados"
 <br><br>LANGUAGE_CODE=pt-BR
 <br>TIME_ZONE=America/Sao_Paulo
 </p>
