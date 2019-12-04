@@ -107,7 +107,7 @@ e obter o Token que será usado no cabeçalho dessa forma:
 <br> Authorization = Bearer "Token JWT"
 </p>
 
-## Endpoints da API
+## Documentação - Endpoints da API
 
 Foi utilizado o Postman para gerar uma documentação:<br />
 [Documentação da API](https://documenter.getpostman.com/view/2628786/SWE29LLE?version=latest)
