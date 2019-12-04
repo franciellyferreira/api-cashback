@@ -1,8 +1,9 @@
 from django.test import TestCase
 from django.contrib.auth.models import User
+from django.contrib.auth.hashers import make_password
 from rest_framework.test import APITestCase
 from rest_framework import status
-from django.contrib.auth.hashers import make_password
+
 from decimal import Decimal
 
 from api.models import Revendedor, Compra
@@ -55,7 +56,7 @@ class TestLogin(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     
-class TestRevendedor(APITestCase):
+class TestRevendedorCreate(APITestCase):
     """
         Módulo de teste dos endpoints do Revendedor.
     """
@@ -80,7 +81,7 @@ class TestRevendedor(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
 
-class TestCompra(APITestCase):
+class TestCompraListCreate(APITestCase):
     """
         Módulo de teste dos endpoints da Compra.
     """
@@ -118,7 +119,7 @@ class TestCompra(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
 
-class TestCashback(APITestCase):
+class TestCompraUpdateDelete(APITestCase):
     """
         Módulo de teste dos endpoints de Cashback.
     """
@@ -126,7 +127,7 @@ class TestCashback(APITestCase):
         Compra.objects.create(
             valor=50.00,
             data="2019-11-29",
-            cpf="12345678911"
+            cpf="12345678922"
         )
 
         self.user = User.objects.create(username="admin", email="admin@admin.com")
@@ -139,21 +140,23 @@ class TestCashback(APITestCase):
         })
     
     def test_atualizar_compras(self):
+        compra = Compra.objects.get(cpf="12345678922")
         self.client.credentials(HTTP_AUTHORIZATION="Bearer " + self.token.data['access'])
-        response = self.client.put("/api/compras/1/", {
+        response = self.client.put("/api/compras/"+str(compra.id)+"/", {
             "valor": 227.30,
             "data": "2019-11-29",
-            "cpf": "1234567833"
+            "cpf": "12345678922"
         })
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_remover_compras(self):
+        compra = Compra.objects.get(cpf="12345678922")
         self.client.credentials(HTTP_AUTHORIZATION="Bearer " + self.token.data['access'])
-        response = self.client.delete("/api/compras/1/")
+        response = self.client.delete("/api/compras/"+str(compra.id)+"/")
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
 
-class TestListTotalCashback(APITestCase):
+class TestCashbackList(APITestCase):
     """
         Módulo de testes do acumulo de cashback
     """
@@ -161,22 +164,22 @@ class TestListTotalCashback(APITestCase):
         Compra.objects.create(
             valor=50.00,
             data="2019-12-02",
-            cpf="12345678911"
+            cpf="12345678933"
         )
         Compra.objects.create(
             valor=49.20,
             data="2019-12-02",
-            cpf="12345678922"
+            cpf="12345678944"
         )
         Compra.objects.create(
             valor=102.87,
             data="2019-12-02",
-            cpf="12345678933"
+            cpf="12345678955"
         )
         Compra.objects.create(
             valor=9.80,
             data="2019-12-02",
-            cpf="12345678933"
+            cpf="12345678955"
         )
 
         self.user = User.objects.create(username="admin", email="admin@admin.com")

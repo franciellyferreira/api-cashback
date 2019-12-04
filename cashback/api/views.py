@@ -22,6 +22,7 @@ from api.serializers import (
     RevendedorSerializer, 
     CompraSerializerInput,
     CompraSerializerOutput,
+    CashbackSerializer
 )
 
 
@@ -121,14 +122,11 @@ class CompraUpdateDelete(APIView):
             compra.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
         else:
-            return Response(
-                {'status': 'Esta compra não pode ser deletada.'},
-                status=status.HTTP_404_NOT_FOUND
-            )
+            return Response(status=status.HTTP_404_NOT_FOUND)
 
 
 @api_view(['GET'])
-@permission_classes([IsAuthenticated])
+# @permission_classes([IsAuthenticated])
 def cashback_list(request):
     """
         Lista o calculo total de cashback.
@@ -141,7 +139,7 @@ def cashback_list(request):
             data = response.json()
             if data['statusCode'] == 200:
                 cashback.append({"cpf": item['cpf'], "credito": data['body']['credit']})
-            
-        return Response(cashback, status=status.HTTP_200_OK)
+        serializer = CashbackSerializer(cashback, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
     else:
         return Response({}, status=status.HTTP_404_NOT_FOUND)
