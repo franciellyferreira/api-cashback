@@ -81,12 +81,10 @@ Criar super usuário para usar na Autenticação JWT
 $ python3 manage.py createsuperuser
 ```
 
-<p>
-Caso você tenha algum problema para instalar a dependência *mysqlclient* que consta no arquivo requirements.txt, tente instalar as seguintes bibliotecas:
+!!! Caso você tenha algum problema para instalar a dependência *mysqlclient* que consta no arquivo requirements.txt, tente instalar as seguintes bibliotecas:
 ```bash
 $ sudo apt-get install libssl-dev libffi-dev
 ```
-</p>
 
 
 ### Executar Testes
