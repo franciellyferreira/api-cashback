@@ -20,7 +20,7 @@ Crie um banco de dados MySQL para esse projeto
 
 ### .Env
 
-Crie um arquivo para armazenar as variáveis de ambiente sensíveis
+Crie um arquivo para armazenar as variáveis de ambiente sensíveis (mesmo nível no arquivo manage.py)
 ```bash
 $ cd cashback
 $ touch .env
