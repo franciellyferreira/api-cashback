@@ -76,7 +76,7 @@ $ python3 manage.py makemigrations
 $ python3 manage.py migrate
 ```
 
-Criar super usuário para usar na autenticação
+Criar super usuário para usar na Autenticação JWT
 ```bash
 $ python3 manage.py createsuperuser
 ```
@@ -104,7 +104,7 @@ $ python3 manage.py runserver
 <p>
 Para utilizar os endpoints da API é necessário autenticar
 e obter o Token que será usado no cabeçalho dessa forma:
-<br> Authorization = Bearer <Token_JWT>
+<br> Authorization = Bearer "Token JWT"
 </p>
 
 ## Endpoints da API
