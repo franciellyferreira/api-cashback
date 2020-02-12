@@ -1,6 +1,6 @@
 certifi==2019.11.28
 chardet==3.0.4
-Django==2.2.8
+Django==2.2.10
 djangorestframework==3.10.3
 djangorestframework-simplejwt==4.3.0
 idna==2.8
