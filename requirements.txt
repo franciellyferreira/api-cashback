@@ -5,7 +5,7 @@ djangorestframework==3.11.2
 djangorestframework-simplejwt==4.3.0
 idna==2.8
 mysqlclient==1.4.6
-PyJWT==1.7.1
+PyJWT==2.4.0
 python-decouple==3.3
 pytz==2019.3
 requests==2.22.0
